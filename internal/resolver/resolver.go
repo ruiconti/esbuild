@@ -473,8 +473,8 @@ func (res *Resolver) Resolve(sourceDir string, importPath string, kind ast.Impor
 		return nil, debugMeta
 	}
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
+	res.mutex.Lock()
+	defer res.mutex.Unlock()
 	sourceDirInfo := r.loadModuleSuffixesForSourceDir(sourceDir)
 
 	// Check for the Yarn PnP manifest if it hasn't already been checked for
@@ -582,8 +582,8 @@ func (res *Resolver) ResolveAbs(absPath string) *ResolveResult {
 		r.debugLogs = &debugLogs{what: fmt.Sprintf("Getting metadata for absolute path %s", absPath)}
 	}
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
+	res.mutex.Lock()
+	defer res.mutex.Unlock()
 
 	// Just decorate the absolute path with information from parent directories
 	result := &ResolveResult{PathPair: PathPair{Primary: logger.Path{Text: absPath, Namespace: "file"}}}
@@ -601,8 +601,8 @@ func (res *Resolver) ProbeResolvePackageAsRelative(sourceDir string, importPath 
 	}
 	absPath := r.fs.Join(sourceDir, importPath)
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
+	res.mutex.Lock()
+	defer res.mutex.Unlock()
 	r.loadModuleSuffixesForSourceDir(sourceDir)
 
 	if pair, ok, diffCase := r.loadAsFileOrDirectory(absPath); ok {
