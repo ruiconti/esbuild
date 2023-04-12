@@ -579,8 +579,8 @@ func (res *Resolver) ResolveAbs(absPath string) *ResolveResult {
 		r.debugLogs = &debugLogs{what: fmt.Sprintf("Getting metadata for absolute path %s", absPath)}
 	}
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
+	// r.mutex.Lock()
+	// defer r.mutex.Unlock()
 
 	// Just decorate the absolute path with information from parent directories
 	result := &ResolveResult{PathPair: PathPair{Primary: logger.Path{Text: absPath, Namespace: "file"}}}
