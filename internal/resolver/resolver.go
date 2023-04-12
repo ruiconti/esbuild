@@ -231,7 +231,7 @@ type resolverQuery struct {
 	debugMeta      *DebugMeta
 	debugLogs      *debugLogs
 	kind           ast.ImportKind
-	cachemu        *sync.Mutex
+	cachemu        sync.Mutex
 }
 
 func NewResolver(fs fs.FS, log logger.Log, caches *cache.CacheSet, options config.Options) *Resolver {
