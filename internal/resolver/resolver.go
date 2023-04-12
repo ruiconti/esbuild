@@ -221,7 +221,7 @@ type Resolver struct {
 	// reducing parallelism in the resolver helps the rest of the bundler go
 	// faster. I'm not sure why this is but please don't change this unless you
 	// do a lot of testing with various benchmarks and there aren't any regressions.
-	// mutex sync.Mutex
+	mutex   sync.Mutex
 	cachemu sync.Mutex
 }
 
@@ -581,8 +581,8 @@ func (res *Resolver) ResolveAbs(absPath string) *ResolveResult {
 		r.debugLogs = &debugLogs{what: fmt.Sprintf("Getting metadata for absolute path %s", absPath)}
 	}
 
-	// r.mutex.Lock()
-	// defer r.mutex.Unlock()
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
 
 	// Just decorate the absolute path with information from parent directories
 	result := &ResolveResult{PathPair: PathPair{Primary: logger.Path{Text: absPath, Namespace: "file"}}}
@@ -600,8 +600,8 @@ func (res *Resolver) ProbeResolvePackageAsRelative(sourceDir string, importPath 
 	}
 	absPath := r.fs.Join(sourceDir, importPath)
 
-	// r.mutex.Lock()
-	// defer r.mutex.Unlock()
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
 	r.loadModuleSuffixesForSourceDir(sourceDir)
 
 	if pair, ok, diffCase := r.loadAsFileOrDirectory(absPath); ok {
