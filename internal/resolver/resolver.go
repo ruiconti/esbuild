@@ -6,6 +6,7 @@ import (
 	"path"
 	"sort"
 	"strings"
+	"sync"
 	"syscall"
 
 	"github.com/evanw/esbuild/internal/ast"
@@ -221,6 +222,7 @@ type Resolver struct {
 	// faster. I'm not sure why this is but please don't change this unless you
 	// do a lot of testing with various benchmarks and there aren't any regressions.
 	// mutex sync.Mutex
+	cachemu sync.Mutex
 }
 
 type resolverQuery struct {
@@ -953,6 +955,8 @@ type dirInfo struct {
 
 func (r resolverQuery) dirInfoCached(path string) *dirInfo {
 	// First, check the cache
+	defer r.cachemu.Unlock()
+	r.cachemu.Lock()
 	cached, ok := r.dirCache[path]
 
 	// Cache hit: stop now
