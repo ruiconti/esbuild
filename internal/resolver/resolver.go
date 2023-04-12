@@ -6,7 +6,6 @@ import (
 	"path"
 	"sort"
 	"strings"
-	"sync"
 	"syscall"
 
 	"github.com/evanw/esbuild/internal/ast"
@@ -221,7 +220,7 @@ type Resolver struct {
 	// reducing parallelism in the resolver helps the rest of the bundler go
 	// faster. I'm not sure why this is but please don't change this unless you
 	// do a lot of testing with various benchmarks and there aren't any regressions.
-	mutex sync.Mutex
+	// mutex sync.Mutex
 }
 
 type resolverQuery struct {
@@ -471,8 +470,8 @@ func (res *Resolver) Resolve(sourceDir string, importPath string, kind ast.Impor
 		return nil, debugMeta
 	}
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
+	// r.mutex.Lock()
+	// defer r.mutex.Unlock()
 	sourceDirInfo := r.loadModuleSuffixesForSourceDir(sourceDir)
 
 	// Check for the Yarn PnP manifest if it hasn't already been checked for
@@ -599,8 +598,8 @@ func (res *Resolver) ProbeResolvePackageAsRelative(sourceDir string, importPath 
 	}
 	absPath := r.fs.Join(sourceDir, importPath)
 
-	r.mutex.Lock()
-	defer r.mutex.Unlock()
+	// r.mutex.Lock()
+	// defer r.mutex.Unlock()
 	r.loadModuleSuffixesForSourceDir(sourceDir)
 
 	if pair, ok, diffCase := r.loadAsFileOrDirectory(absPath); ok {
