@@ -472,8 +472,8 @@ func (res *Resolver) Resolve(sourceDir string, importPath string, kind ast.Impor
 		return nil, debugMeta
 	}
 
-	// r.mutex.Lock()
-	// defer r.mutex.Unlock()
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
 	sourceDirInfo := r.loadModuleSuffixesForSourceDir(sourceDir)
 
 	// Check for the Yarn PnP manifest if it hasn't already been checked for
