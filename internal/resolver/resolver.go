@@ -221,7 +221,7 @@ type Resolver struct {
 	// reducing parallelism in the resolver helps the rest of the bundler go
 	// faster. I'm not sure why this is but please don't change this unless you
 	// do a lot of testing with various benchmarks and there aren't any regressions.
-	mutex *sync.Mutex
+	mutex sync.Mutex
 	// cachemu sync.Mutex
 }
 
