@@ -221,8 +221,8 @@ type Resolver struct {
 	// reducing parallelism in the resolver helps the rest of the bundler go
 	// faster. I'm not sure why this is but please don't change this unless you
 	// do a lot of testing with various benchmarks and there aren't any regressions.
-	mutex   sync.Mutex
-	cachemu sync.Mutex
+	mutex *sync.Mutex
+	// cachemu sync.Mutex
 }
 
 type resolverQuery struct {
@@ -231,6 +231,7 @@ type resolverQuery struct {
 	debugMeta      *DebugMeta
 	debugLogs      *debugLogs
 	kind           ast.ImportKind
+	cachemu        *sync.Mutex
 }
 
 func NewResolver(fs fs.FS, log logger.Log, caches *cache.CacheSet, options config.Options) *Resolver {
